@@ -2064,3 +2064,14 @@ body::after {
   .cred-item { font-size: 10px; }
   .proof-results { grid-template-columns: 1fr; }
 }
+/* Force header CTA text to stay white */
+.header .header-nav a.header-cta,
+.header .header-nav a.header-cta:link,
+.header .header-nav a.header-cta:visited,
+.header .header-nav a.header-cta:hover,
+.header .header-nav a.header-cta:active,
+.header .header-nav a.header-cta:focus {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+}
