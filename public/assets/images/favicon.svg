@@ -1,6 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="12" fill="#0b0b0f"/>
-  <text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle"
-        font-family="Helvetica, Arial, sans-serif" font-weight="800" font-size="28"
-        fill="#e11d28" letter-spacing="-1">KR</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Karim Ruscitti KR logo">
+  <rect x="80" y="80" width="864" height="864" rx="152" fill="#000000"/>
+  <g fill="#e11d28">
+    <path d="M242 276h104v472H242z"/>
+    <path d="M344 463 504 276h122L447 486l190 262H520L344 504z"/>
+    <path d="M500 276h173c67 0 121 18 161 54 40 35 60 83 60 143 0 59-20 105-61 139-40 34-96 51-168 51H530l-58-83h188c44 0 76-9 98-27 22-18 33-44 33-78 0-35-11-62-34-82-22-20-54-30-96-30H500z"/>
+    <path d="M597 605h107l111 143H696z"/>
+  </g>
 </svg>

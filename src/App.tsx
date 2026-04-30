@@ -286,17 +286,103 @@ function ApplyButton({ children }: { children: string }) {
 }
 
 function Header() {
+  // Mobile nav state: desktop keeps the existing `.header-nav` styling unchanged.
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const firstMobileItemRef = useRef<HTMLButtonElement>(null);
+
+  const navItems = [
+    { label: 'Coaching', target: 'offer' },
+    { label: 'Coach', target: 'coach' },
+    { label: 'FAQ', target: 'faq' },
+    { label: 'Apply For Coaching', target: 'apply', isCta: true },
+  ];
+
+  function handleNavClick(target: string) {
+    setIsMenuOpen(false);
+    scrollToSection(target);
+  }
+
+  // Accessibility: focus the first mobile item when opened, and close on Escape.
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    firstMobileItemRef.current?.focus();
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setIsMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isMenuOpen]);
+
   return (
     <header className="header">
-      <div className="header-logo">
+      <button
+        type="button"
+        className="header-logo"
+        aria-label="Back to top"
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
         <div className="header-logo-mark" />
         <p>KARIM RUSCITTI</p>
-      </div>
-      <nav className="header-nav" aria-label="Primary navigation">
-        <button type="button" onClick={() => scrollToSection('offer')}>Coaching</button>
-        <button type="button" onClick={() => scrollToSection('coach')}>Coach</button>
-        <button type="button" onClick={() => scrollToSection('faq')}>FAQ</button>
-        <button type="button" onClick={() => scrollToSection('apply')} className="header-cta">Apply For Coaching</button>
+      </button>
+
+      {/* Desktop nav: existing CSS classes remain in control at 1024px and up. */}
+      <nav className="header-nav max-[1023px]:hidden" aria-label="Primary navigation">
+        {navItems.map((item) => (
+          <button
+            type="button"
+            onClick={() => scrollToSection(item.target)}
+            className={item.isCta ? 'header-cta' : undefined}
+            key={item.label}
+          >
+            {item.label}
+          </button>
+        ))}
+      </nav>
+
+      {/* Mobile/tablet hamburger: Tailwind-only responsive extension, hidden at 1024px and up. */}
+      <button
+        type="button"
+        ref={menuButtonRef}
+        className="hidden max-[1023px]:inline-flex h-10 w-10 items-center justify-center rounded border border-[#2a2a35] bg-[#121217] text-[#eeeef0] transition-colors hover:border-[#35354a] focus:outline-none focus:ring-2 focus:ring-[#e11d28] focus:ring-offset-2 focus:ring-offset-[#07070a]"
+        aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+        aria-expanded={isMenuOpen}
+        aria-controls="mobile-navigation"
+        onClick={() => setIsMenuOpen((open) => !open)}
+      >
+        <span className="sr-only">{isMenuOpen ? 'Close menu' : 'Open menu'}</span>
+        <span className="flex h-5 w-5 flex-col justify-center gap-1.5" aria-hidden="true">
+          <span className={`h-0.5 w-5 rounded bg-current transition-transform ${isMenuOpen ? 'translate-y-2 rotate-45' : ''}`} />
+          <span className={`h-0.5 w-5 rounded bg-current transition-opacity ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`} />
+          <span className={`h-0.5 w-5 rounded bg-current transition-transform ${isMenuOpen ? '-translate-y-2 -rotate-45' : ''}`} />
+        </span>
+      </button>
+
+      {/* Mobile/tablet dropdown: vertical menu, closes after selection. */}
+      <nav
+        id="mobile-navigation"
+        aria-label="Mobile navigation"
+        className={`${isMenuOpen ? 'max-[1023px]:block' : 'hidden'} min-[1024px]:hidden fixed left-0 right-0 top-[calc(64px+env(safe-area-inset-top))] border-b border-[#2a2a35] bg-[#07070a]/95 px-4 py-4 shadow-2xl backdrop-blur-xl`}
+      >
+        <div className="mx-auto flex w-full max-w-sm flex-col gap-2">
+          {navItems.map((item, index) => (
+            <button
+              type="button"
+              ref={index === 0 ? firstMobileItemRef : undefined}
+              className={`${item.isCta ? 'bg-[#e11d28] text-white shadow-[0_0_24px_rgba(225,29,40,0.25)]' : 'bg-[#121217] text-[#eeeef0]'} w-full rounded border border-[#2a2a35] px-4 py-3 text-left font-body text-xs font-bold uppercase tracking-[0.16em] transition-colors hover:border-[#35354a] focus:outline-none focus:ring-2 focus:ring-[#e11d28] focus:ring-offset-2 focus:ring-offset-[#07070a]`}
+              onClick={() => handleNavClick(item.target)}
+              key={item.label}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
       </nav>
     </header>
   );
@@ -579,12 +665,22 @@ function FaqSection() {
           <h2 className="section-title">Common Questions</h2>
         </div>
         {faqs.map((faq, index) => (
-          <div className={`faq-item reveal ${openFaq === index ? 'open' : ''}`} key={faq.question}>
-            <button className="faq-question" type="button" onClick={() => setOpenFaq(openFaq === index ? null : index)}>
+          <div
+            // Keep `visible` in React state so FAQ clicks do not remove the scroll-reveal class.
+            className={`faq-item reveal visible ${openFaq === index ? 'open' : ''}`}
+            key={faq.question}
+          >
+            <button
+              className="faq-question"
+              type="button"
+              aria-expanded={openFaq === index}
+              aria-controls={`faq-answer-${index}`}
+              onClick={() => setOpenFaq(openFaq === index ? null : index)}
+            >
               {faq.question}
               <span className="faq-icon">+</span>
             </button>
-            <div className="faq-answer">
+            <div className="faq-answer" id={`faq-answer-${index}`}>
               <p>{faq.answer}</p>
             </div>
           </div>
@@ -969,7 +1065,8 @@ export default function App() {
   const mobileCtaVisible = useMobileCta();
 
   return (
-    <>
+    // Prevent small-screen horizontal overflow without changing desktop layout.
+    <div className="min-h-screen overflow-x-hidden">
       <Header />
       <Hero />
       <CredibilityBar />
@@ -984,6 +1081,6 @@ export default function App() {
       <FinalCta />
       <Footer />
       <MobileCta isVisible={mobileCtaVisible} />
-    </>
+    </div>
   );
 }

@@ -159,6 +159,10 @@ body::after {
   align-items: center;
   gap: 8px;
   white-space: nowrap;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
 }
 .header-logo-mark {
   width: 6px; height: 6px;
@@ -188,7 +192,9 @@ body::after {
 .header-nav a:hover,
 .header-nav button:hover { color: var(--text); }
 
-.header-cta {
+/* Header CTA: scoped selector beats the generic `.header-nav button` reset. */
+.header-cta,
+.header-nav .header-cta {
   padding: 9px 22px;
   background: var(--accent);
   color: #FFFFFF;
@@ -210,8 +216,10 @@ body::after {
   color: #FFFFFF;
   opacity: 1;
 }
-.header-cta:hover {
+.header-cta:hover,
+.header-nav .header-cta:hover {
   background: var(--accent-dark);
+  color: #FFFFFF;
   transform: translateY(-1px);
   box-shadow: 0 4px 30px var(--accent-glow);
 }
@@ -483,6 +491,37 @@ body::after {
   padding-bottom: 2px;
 }
 .hero-social-link:hover { color: var(--text); border-color: var(--text-secondary); }
+
+/* Mobile hero CTA: keep the home button compact without changing desktop sizing. */
+@media (max-width: 600px) {
+  .hero-actions {
+    gap: 14px;
+  }
+
+  .hero .btn-apply {
+    gap: 10px;
+    padding: 14px 22px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+
+  .hero .btn-apply-arrow {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-actions {
+    gap: 10px;
+  }
+
+  .hero .btn-apply {
+    padding: 12px 18px;
+    font-size: 13px;
+    letter-spacing: 1.4px;
+  }
+}
 
 /* Hero fineprint - limited offer badge */
 .hero-fineprint {
@@ -1503,7 +1542,7 @@ body::after {
   padding: 0 0;
 }
 .faq-item.open .faq-answer {
-  max-height: 200px;
+  max-height: 420px;
   padding: 0 0 22px;
 }
 .faq-answer p {
