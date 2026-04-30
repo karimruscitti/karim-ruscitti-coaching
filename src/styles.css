@@ -141,7 +141,7 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(7, 7, 10, 0.95);
+  background: var(--black);
   backdrop-filter: blur(12px) saturate(1.2);
   -webkit-backdrop-filter: blur(12px) saturate(1.2);
   border-bottom: 1px solid rgba(42, 42, 53, 0.5);
