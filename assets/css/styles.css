@@ -222,6 +222,22 @@ body::after {
   .header-cta { font-size: 9.5px; letter-spacing: 1px; padding: 7px 12px; }
 }
 
+.header-logo-mark p {
+  font-size: 1px;
+}
+
+.header-cta {
+  display: block; /* or flex, whatever your default is */
+}
+
+/* 2. Hide on Mobile Phones (screens 767px and smaller) */
+@media (max-width: 767px) {
+  .header-logo-mark,
+  .header-cta {
+    display: none;
+  }
+}
+
 /* ============================================
    HERO SECTION
    ============================================ */
@@ -326,6 +342,8 @@ body::after {
   .hero-portrait {
     max-width: 320px;
   }
+
+
 }
 
 .hero-badge {
