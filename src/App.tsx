@@ -462,6 +462,21 @@ function CredibilityBar() {
 }
 
 function ProblemSection() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  function togglePlay() {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.muted = false;
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  }
+
   return (
     <section className="problem">
       <div className="problem-grid">
@@ -481,17 +496,28 @@ function ProblemSection() {
             ))}
           </ul>
         </div>
-        <div className="problem-visual problem-visual--placeholder reveal reveal-delay-2">
+        <div className="problem-visual reveal reveal-delay-2">
           <div className="problem-visual-tag">@karimruscitti</div>
-          <div className="problem-visual-inner">
-            <div className="problem-visual-play" aria-hidden="true">
+          <video
+            ref={videoRef}
+            src="/assets/Coaching_Website_Video.mp4"
+            loop
+            playsInline
+            className="problem-visual-video"
+            onClick={togglePlay}
+          />
+          {!isPlaying && (
+            <button
+              type="button"
+              className="problem-visual-play-button"
+              onClick={togglePlay}
+              aria-label="Play video"
+            >
               <svg width="20" height="22" viewBox="0 0 20 22" fill="none">
                 <path d="M20 11L0 22V0L20 11Z" fill="white" />
               </svg>
-            </div>
-            <div className="problem-visual-placeholder-title">Breakdown coming soon</div>
-            <div className="problem-visual-placeholder-sub">Why generic programs don&apos;t work</div>
-          </div>
+            </button>
+          )}
         </div>
       </div>
     </section>
