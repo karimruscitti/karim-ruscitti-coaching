@@ -500,7 +500,7 @@ function ProblemSection() {
           <div className="problem-visual-tag">@karimruscitti</div>
           <video
             ref={videoRef}
-            src="/assets/Coaching_Website_Video.mp4"
+            src="public/assets/Coaching_Website_Video.mp4"
             loop
             playsInline
             className="problem-visual-video"
