@@ -464,6 +464,7 @@ function CredibilityBar() {
 function ProblemSection() {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const posterImage = '/assets/images/thumbnail.png';
 
   function togglePlay() {
     if (videoRef.current) {
@@ -501,6 +502,7 @@ function ProblemSection() {
           <video
             ref={videoRef}
             src="/assets/Coaching_Website_Video.mp4"
+            poster={posterImage}
             loop
             playsInline
             className="problem-visual-video"
